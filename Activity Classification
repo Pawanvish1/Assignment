@@ -1,0 +1,23 @@
+ Code:
+ class ActivityClassifier {
+ public:
+    enum Activity {
+        RESTING,
+ WALKING,
+        RUNNING,
+        PLAYING
+    };
+ Activity classifyActivity(IMUdata* acc) {
+        // Simple classification based on the accelerometer's z-axis value
+        float zValue = acc[0].z; // Consider only one sample for simplicity
+        if (zValue < 0.1) {
+            return RESTING;
+        } else if (zValue < 0.5) {
+            return WALKING;
+        } else if (zValue < 1.0) {
+            return RUNNING;
+        } else {
+            return PLAYING;
+        }
+    }
+ };
