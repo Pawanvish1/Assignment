@@ -1,1 +1,1 @@
-# Assignment
+# Dog Activity Tracker
