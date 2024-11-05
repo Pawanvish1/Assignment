@@ -1,0 +1,27 @@
+Code:
+#include <esp_sleep.h>
+ void goToSleep() {
+    // Put the device into deep sleep mode
+    esp_sleep_enable_timer_wakeup(120000000);  // Sleep for 2 minutes
+    Serial.println("Going to sleep now...");
+    esp_deep_sleep_start();
+ }
+ void setup() {
+    Serial.begin(115200);
+    delay(1000);  // Ensure Serial is ready
+    // Start WiFi and NTP Time Sync
+ WiFi.begin("your-SSID", "your-PASSWORD");  // Update with your Wi-Fi credentials
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println("Connected to WiFi");
+ TimeManager timeManager;
+    timeManager.begin();
+    timeManager.update();
+    Serial.println("Current time: " + timeManager.getCurrentTime());
+    goToSleep();  // Enter deep sleep
+ }
+void loop() {
+    // This will never run as the ESP32 will be in deep sleep
+ }
