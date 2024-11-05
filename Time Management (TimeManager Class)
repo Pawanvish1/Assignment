@@ -1,0 +1,22 @@
+ Code:
+ #include <WiFi.h>
+ #include <NTPClient.h>
+ #include <WiFiUdp.h>
+ // Time management class
+ class TimeManager {
+ private:
+ WiFiUDP ntpUDP;
+    NTPClient timeClient;
+ public:
+ TimeManager() : timeClient(ntpUDP, "pool.ntp.org") {}
+    void begin() {
+        timeClient.begin();
+        timeClient.setTimeOffset(0);  // UTC time, adjust if needed
+    }
+    void update() {
+        timeClient.update();
+    }
+    String getCurrentTime() {
+        return timeClient.getFormattedTime(); // Returns time as HH:MM:SS
+    }
+ };
