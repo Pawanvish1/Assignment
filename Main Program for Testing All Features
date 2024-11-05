@@ -1,0 +1,51 @@
+ Code:
+ SimulatedQMI8658 sensor;
+ TimeManager timeManager;
+ ActivityClassifier activityClassifier;
+ void motionDetectedCallback() {
+    Serial.println("Motion Detected! Triggering Callback...");
+    // Simulate accelerometer reading
+    IMUdata acc[1];
+    sensor.readFromFifo(acc, 1, nullptr, 0);
+    // Classify the activity
+ ActivityClassifier::Activity activity = activityClassifier.classifyActivity(acc);
+    String activityStr;
+    switch (activity) {
+        case ActivityClassifier::RESTING:
+            activityStr = "Resting";
+            break;
+        case ActivityClassifier::WALKING:
+            activityStr = "Walking";
+            break;
+        case ActivityClassifier::RUNNING:
+            activityStr = "Running";
+            break;
+        case ActivityClassifier::PLAYING:
+            activityStr = "Playing";
+            break;
+    }
+    // Get current time
+    timeManager.update();
+    String currentTime = timeManager.getCurrentTime();
+    // Store the data
+    storeActivityData(activityStr, currentTime);
+ }
+ void setup() {
+    Serial.begin(115200);
+    // Initialize components
+    sensor.begin();
+    sensor.setWakeupMotionEventCallBack(motionDetectedCallback);
+    // Initialize TimeManager and sync time
+    timeManager.begin();
+    timeManager.update();
+    Serial.println("Current Time: " + timeManager.getCurrentTime());
+    // Setup BLE
+    setupBLE();
+    // Enter deep sleep to save power
+    goToSleep();
+}
+ void loop() {
+    // Simulate motion detection every second
+    sensor.simulateMotion();
+    delay(1000);  // 1 second delay for the motion simulation loop
+}
