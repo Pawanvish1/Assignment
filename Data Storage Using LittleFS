@@ -1,0 +1,18 @@
+Code:
+ #include <LittleFS.h>
+ // Function to store activity data to a file
+ void storeActivityData(String activity, String time) {
+    if (!LittleFS.begin()) {
+        Serial.println("LittleFS Mount Failed");
+        return;
+    }
+    String filePath = "/data/" + time + ".txt";
+    File dataFile = LittleFS.open(filePath, FILE_WRITE);
+    if (dataFile) {
+        dataFile.println("Activity: " + activity);
+        dataFile.close();
+        Serial.println("Data written to: " + filePath);
+    } else {
+        Serial.println("Failed to open file for writing");
+    }
+ }
